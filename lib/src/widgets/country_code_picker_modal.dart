@@ -19,7 +19,12 @@ class CountryCodePickerModal extends StatefulWidget {
     required this.showSearchBar,
     required this.showDialCode,
     this.focusedCountry,
+    this.searchHintText,
+    this.searchTitle,
   }) : super(key: key);
+
+  final String? searchHintText;
+  final String? searchTitle;
 
   /// {@macro favorites}
   final List<String> favorites;
@@ -62,8 +67,7 @@ class _CountryCodePickerModalState extends State<CountryCodePickerModal> {
     itemScrollController = ItemScrollController();
 
     final favoriteList = <CountryCode>[
-      if (widget.favorites.isNotEmpty)
-        ...allCountryCodes.where((c) => widget.favorites.contains(c.code))
+      if (widget.favorites.isNotEmpty) ...allCountryCodes.where((c) => widget.favorites.contains(c.code))
     ];
     final filteredList = [
       ...widget.filteredCountries.isNotEmpty
@@ -106,17 +110,17 @@ class _CountryCodePickerModalState extends State<CountryCodePickerModal> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const _ModalTitle(),
+        _ModalTitle(searchTitle: widget.searchTitle),
         if (widget.showSearchBar)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: TextField(
               keyboardType: TextInputType.text,
-              decoration: const InputDecoration(
-                hintText: "'Country', 'Code' or 'Dial Code'",
-                hintStyle: TextStyle(fontSize: 12),
-                suffixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(
+              decoration: InputDecoration(
+                hintText: widget.searchHintText ?? "'Country', 'Code' or 'Dial Code'",
+                hintStyle: const TextStyle(fontSize: 12),
+                suffixIcon: const Icon(Icons.search),
+                border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(kBorderRadius),
                   borderSide: BorderSide(
                     width: 2,
@@ -124,7 +128,7 @@ class _CountryCodePickerModalState extends State<CountryCodePickerModal> {
                   ),
                 ),
                 filled: true,
-                contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                 fillColor: Colors.white,
               ),
               onChanged: (query) {
@@ -134,12 +138,8 @@ class _CountryCodePickerModalState extends State<CountryCodePickerModal> {
                     List<CountryCode>.from(
                       baseList.where(
                         (c) =>
-                            c.code
-                                .toLowerCase()
-                                .contains(query.toLowerCase()) ||
-                            c.dialCode
-                                .toLowerCase()
-                                .contains(query.toLowerCase()) ||
+                            c.code.toLowerCase().contains(query.toLowerCase()) ||
+                            c.dialCode.toLowerCase().contains(query.toLowerCase()) ||
                             c.name.toLowerCase().contains(query.toLowerCase()),
                       ),
                     ),
@@ -209,15 +209,16 @@ class _ListTrailing extends StatelessWidget {
 }
 
 class _ModalTitle extends StatelessWidget {
-  const _ModalTitle({Key? key}) : super(key: key);
+  const _ModalTitle({Key? key, this.searchTitle}) : super(key: key);
+  final String? searchTitle;
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.all(16),
+    return Padding(
+      padding: const EdgeInsets.all(16),
       child: Text(
-        'Select your country',
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        searchTitle ?? 'Select your country',
+        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
     );
   }

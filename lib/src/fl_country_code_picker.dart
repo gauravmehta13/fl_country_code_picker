@@ -53,8 +53,7 @@ class FlCountryCodePicker {
   final List<String> filteredCountries;
 
   /// Adds all of filtered countries to the list.
-  void addFilteredCountries(List<String> countries) =>
-      filteredCountries.addAll(filteredCountries);
+  void addFilteredCountries(List<String> countries) => filteredCountries.addAll(filteredCountries);
 
   /// {@template favorite_icon}
   /// Custom icon of favorite countries.
@@ -97,11 +96,12 @@ class FlCountryCodePicker {
     double pickerMaxHeight = 500,
     bool scrollToDeviceLocale = false,
     String? initialSelectedLocale,
+    String? searchHintText,
+    String? searchTitle,
   }) async {
     // Computations for modal height.
     final fullScreenHeight = MediaQuery.of(context).size.height;
-    final allowance = MediaQuery.of(context).padding.top -
-        MediaQuery.of(context).padding.bottom;
+    final allowance = MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom;
 
     // Gets the country code of the device.
     final locale = WidgetsBinding.instance.window.locale.countryCode;
@@ -129,6 +129,8 @@ class FlCountryCodePicker {
         showSearchBar: showSearchBar,
         showDialCode: showDialCode,
         focusedCountry: scrollToDeviceLocale ? locale : initialSelectedLocale,
+        searchHintText: searchHintText,
+        searchTitle: searchTitle,
       ),
     );
 
