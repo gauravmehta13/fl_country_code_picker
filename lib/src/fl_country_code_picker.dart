@@ -1,3 +1,5 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -98,6 +100,7 @@ class FlCountryCodePicker {
     String? initialSelectedLocale,
     String? searchHintText,
     String? searchTitle,
+    String? Function(String)? titleBuilder,
   }) async {
     // Computations for modal height.
     final fullScreenHeight = MediaQuery.of(context).size.height;
@@ -131,6 +134,7 @@ class FlCountryCodePicker {
         focusedCountry: scrollToDeviceLocale ? locale : initialSelectedLocale,
         searchHintText: searchHintText,
         searchTitle: searchTitle,
+        titleBuilder: titleBuilder,
       ),
     );
 

@@ -1,3 +1,5 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -20,11 +22,18 @@ class CountryCodePickerModal extends StatefulWidget {
     required this.showDialCode,
     this.focusedCountry,
     this.searchHintText,
+    this.titleBuilder,
     this.searchTitle,
   }) : super(key: key);
 
+  /// Hint text for the search bar.
   final String? searchHintText;
+
+  /// Title for the search bar.
   final String? searchTitle;
+
+  /// Builder for the title.
+  final String? Function(String)? titleBuilder;
 
   /// {@macro favorites}
   final List<String> favorites;
@@ -140,7 +149,7 @@ class _CountryCodePickerModalState extends State<CountryCodePickerModal> {
                         (c) =>
                             c.code.toLowerCase().contains(query.toLowerCase()) ||
                             c.dialCode.toLowerCase().contains(query.toLowerCase()) ||
-                            c.name.toLowerCase().contains(query.toLowerCase()),
+                            (widget.titleBuilder?.call(c.name) ?? c.name).toLowerCase().contains(query.toLowerCase()),
                       ),
                     ),
                   );
@@ -158,7 +167,7 @@ class _CountryCodePickerModalState extends State<CountryCodePickerModal> {
               return ListTile(
                 onTap: () => Navigator.pop(context, code),
                 leading: code.flagImage,
-                title: Text(code.name),
+                title: Text(widget.titleBuilder?.call(code.name) ?? code.name),
                 trailing: _ListTrailing(
                   code: code,
                   favorites: widget.favorites,
